@@ -119,3 +119,32 @@ Week 7 of the roadmap is dedicated to stress-testing this budget end-to-end and 
 | 4-bit quantized SLM via Ollama instead of a larger cloud-hosted model | Fits the 4–8 GB RAM constraint and keeps everything offline/private |
 | LangGraph state machine instead of a linear script | Makes conditional flows (grade gating, error handling, multi-turn memory) explicit and extensible |
 | Silent Ollama install/model pull on first launch | Keeps installation frictionless for non-technical users |
+
+## I'd divide the application into 6 major layers:
+                    ┌──────────────────────┐
+                    │       PyQt6 UI       │
+                    └──────────┬───────────┘
+                               │
+                    ┌──────────▼───────────┐
+                    │   Teacher Service    │
+                    └──────────┬───────────┘
+                               │
+                    ┌──────────▼───────────┐
+                    │     LangGraph        │
+                    │ Orchestration/State  │
+                    └────┬─────┬─────┬─────┘
+                         │     │     │
+              ┌──────────┘     │     └──────────┐
+              ▼                ▼                ▼
+         ┌─────────┐      ┌─────────┐      ┌─────────┐
+         │ Audio   │      │   RAG   │      │   LLM   │
+         │ Pipeline│      │ Chroma  │      │ Ollama  │
+         └────┬────┘      └─────────┘      └────┬────┘
+              │                                  │
+       ┌──────┴──────┐                           │
+       │             │                           │
+      VAD           STT                         TTS
+    Silero      Faster-Whisper                  Piper
+                                                  │
+                                                  ▼
+                                               Speaker
