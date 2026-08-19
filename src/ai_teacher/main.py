@@ -1,6 +1,7 @@
-def main():
+from .ui.main_window import run_app
+
+
+def init_app():
     print("Starting of project local techer")
 
-
-if __name__ == "__main__":
-    main()
+    run_app()
